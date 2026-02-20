@@ -1,0 +1,126 @@
+import type { User, Contractor } from "../types";
+
+export const USERS: (User | Contractor)[] = [
+  {
+    id: "user-maria",
+    email: "maria.rodriguez@trustvibe.test",
+    password: "DemoCustomer!123",
+    role: "customer",
+    name: "Maria Rodriguez",
+    avatarUrl: "https://api.dicebear.com/7.x/avataaars/svg?seed=maria&backgroundColor=b6e3f4",
+    phone: "(787) 555-0191",
+    location: "San Juan, PR",
+    memberSince: "2024-03",
+    verified: true,
+  },
+  {
+    id: "user-juan",
+    email: "juan.services@trustvibe.test",
+    password: "DemoContractor!123",
+    role: "contractor",
+    name: "Juan Reyes",
+    businessName: "Juan's Home Services",
+    avatarUrl: "https://api.dicebear.com/7.x/avataaars/svg?seed=juan&backgroundColor=ffd5dc",
+    phone: "(787) 555-0234",
+    location: "San Juan, PR",
+    memberSince: "2023-11",
+    verified: true,
+    specialty: ["Plumbing", "Tile Work", "Bathroom Renovation"],
+    rating: 4.8,
+    reviewCount: 31,
+    completedJobs: 23,
+    reliabilityScore: 96,
+    bio: "15+ years experience in residential plumbing and bathroom renovation. Licensed and insured. Serving the San Juan metro area. I take pride in clean work and clear communication — every project is treated like it's my own home.",
+    portfolioImages: [
+      "https://picsum.photos/seed/bath-after-1/400/300",
+      "https://picsum.photos/seed/tile-floor-2/400/300",
+      "https://picsum.photos/seed/shower-enclosure/400/300",
+      "https://picsum.photos/seed/vanity-install/400/300",
+    ],
+    licenseNumber: "PR-CONT-2891",
+    insuranceVerified: true,
+    responseTime: "< 2 hours",
+    badges: ["Top Rated", "Licensed", "Insured", "Background Checked"],
+    hourlyRate: 85,
+  } as Contractor,
+  {
+    id: "user-rosa",
+    email: "rosa.plumbing@trustvibe.test",
+    password: "DemoContractor!123",
+    role: "contractor",
+    name: "Rosa Morales",
+    businessName: "Rosa Plumbing Pro",
+    avatarUrl: "https://api.dicebear.com/7.x/avataaars/svg?seed=rosa&backgroundColor=c0aede",
+    phone: "(787) 555-0312",
+    location: "Bayamón, PR",
+    memberSince: "2024-01",
+    verified: true,
+    specialty: ["Plumbing", "Water Heaters", "Pipe Repair"],
+    rating: 4.6,
+    reviewCount: 22,
+    completedJobs: 15,
+    reliabilityScore: 88,
+    bio: "Specialized plumbing contractor with focus on water systems and emergency repairs. Fast response, quality work. Licensed and insured in Puerto Rico.",
+    portfolioImages: [
+      "https://picsum.photos/seed/plumb-job-1/400/300",
+      "https://picsum.photos/seed/water-heater/400/300",
+      "https://picsum.photos/seed/pipe-repair/400/300",
+    ],
+    licenseNumber: "PR-CONT-3142",
+    insuranceVerified: true,
+    responseTime: "< 4 hours",
+    badges: ["Licensed", "Insured"],
+    hourlyRate: 75,
+  } as Contractor,
+  {
+    id: "user-carlos",
+    email: "carlos.electric@trustvibe.test",
+    password: "DemoContractor!123",
+    role: "contractor",
+    name: "Carlos Vega",
+    businessName: "Vega Electric & More",
+    avatarUrl: "https://api.dicebear.com/7.x/avataaars/svg?seed=carlos&backgroundColor=d1d4f9",
+    phone: "(787) 555-0455",
+    location: "Caguas, PR",
+    memberSince: "2023-08",
+    verified: true,
+    specialty: ["Electrical", "Ceiling Fans", "Panel Upgrades"],
+    rating: 4.7,
+    reviewCount: 18,
+    completedJobs: 19,
+    reliabilityScore: 91,
+    bio: "Master electrician with 12 years in residential and light commercial electrical work. All permits pulled. Fast, clean, safe.",
+    portfolioImages: [
+      "https://picsum.photos/seed/electric-panel/400/300",
+      "https://picsum.photos/seed/ceiling-fan/400/300",
+    ],
+    licenseNumber: "PR-ELEC-1847",
+    insuranceVerified: true,
+    responseTime: "< 3 hours",
+    badges: ["Licensed", "Insured", "Permit-Ready"],
+    hourlyRate: 90,
+  } as Contractor,
+  {
+    id: "user-admin",
+    email: "admin@trustvibe.test",
+    password: "DemoAdmin!123",
+    role: "admin",
+    name: "Admin",
+    avatarUrl: "https://api.dicebear.com/7.x/avataaars/svg?seed=admin&backgroundColor=b6e3f4",
+    location: "San Juan, PR",
+    memberSince: "2023-01",
+    verified: true,
+  },
+];
+
+export function findUserByCredentials(email: string, password: string): User | Contractor | null {
+  return USERS.find((u) => u.email === email && u.password === password) ?? null;
+}
+
+export function findUserById(id: string): User | Contractor | null {
+  return USERS.find((u) => u.id === id) ?? null;
+}
+
+export function getContractors(): Contractor[] {
+  return USERS.filter((u): u is Contractor => u.role === "contractor");
+}
