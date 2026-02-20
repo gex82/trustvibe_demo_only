@@ -1,4 +1,5 @@
 import { cn } from "../../utils/cn";
+import { useApp } from "../../context/AppContext";
 
 const styles: Record<string, string> = {
   funded: "bg-emerald-100 text-emerald-700",
@@ -16,22 +17,6 @@ const styles: Record<string, string> = {
   held: "bg-blue-100 text-blue-700",
 };
 
-const labels: Record<string, string> = {
-  in_progress: "In Progress",
-  open: "Open for Quotes",
-  funded: "Funded",
-  completed: "Completed",
-  disputed: "Disputed",
-  pending: "Pending",
-  accepted: "Accepted",
-  rejected: "Not Selected",
-  draft: "Draft",
-  complete_requested: "Completion Requested",
-  withdrawn: "Withdrawn",
-  paid: "Paid",
-  held: "In Escrow",
-};
-
 interface Props {
   status: string;
   size?: "xs" | "sm" | "md";
@@ -45,6 +30,7 @@ const sizes = {
 };
 
 export default function Badge({ status, size = "sm", className }: Props) {
+  const { t } = useApp();
   const style = styles[status] ?? "bg-gray-100 text-gray-500";
   return (
     <span
@@ -55,7 +41,7 @@ export default function Badge({ status, size = "sm", className }: Props) {
         className
       )}
     >
-      {labels[status] ?? status}
+      {t(`status.${status}`, status)}
     </span>
   );
 }

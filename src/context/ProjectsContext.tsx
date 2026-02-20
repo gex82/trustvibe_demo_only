@@ -11,6 +11,7 @@ interface ProjectsContextType {
   approveRelease: (projectId: string) => void;
   raiseIssue: (projectId: string) => void;
   submitQuote: (projectId: string, quote: Omit<Quote, "id" | "submittedAt">) => void;
+  addProject: (project: Omit<Project, "id" | "createdAt" | "quotes" | "status">) => string;
 }
 
 const ProjectsContext = createContext<ProjectsContextType | null>(null);
@@ -76,6 +77,19 @@ export function ProjectsProvider({ children }: { children: ReactNode }) {
     );
   };
 
+  const addProject = (projectData: Omit<Project, "id" | "createdAt" | "quotes" | "status">): string => {
+    const newId = `proj-new-${Date.now()}`;
+    const newProject: Project = {
+      ...projectData,
+      id: newId,
+      status: "open",
+      quotes: [],
+      createdAt: new Date().toISOString().slice(0, 10),
+    };
+    setProjects((prev) => [newProject, ...prev]);
+    return newId;
+  };
+
   return (
     <ProjectsContext.Provider
       value={{
@@ -87,6 +101,7 @@ export function ProjectsProvider({ children }: { children: ReactNode }) {
         approveRelease,
         raiseIssue,
         submitQuote,
+        addProject,
       }}
     >
       {children}

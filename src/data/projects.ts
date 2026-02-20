@@ -14,13 +14,13 @@ export const INITIAL_PROJECTS: Project[] = [
     status: "in_progress",
     createdAt: "2026-01-10",
     photos: [
-      "https://picsum.photos/seed/bathroom-before-1/400/280",
-      "https://picsum.photos/seed/bathroom-before-2/400/280",
+      "/images/jobs/bathroom-renovation.png",
+      "/images/jobs/living-room-reno.png",
     ],
     completionPhotos: [
-      "https://picsum.photos/seed/bathroom-after-main/400/280",
-      "https://picsum.photos/seed/bathroom-after-tile/400/280",
-      "https://picsum.photos/seed/bathroom-after-shower/400/280",
+      "/images/jobs/bathroom-renovation.png",
+      "/images/jobs/bedroom-interior.png",
+      "/images/jobs/living-room-reno.png",
     ],
     completionNote:
       "All work is complete! Tile floor installed, shower enclosure done, new vanity fitted and plumbing connected. Final clean-up done. Please inspect and approve when ready.",
@@ -79,7 +79,7 @@ export const INITIAL_PROJECTS: Project[] = [
     timeline: "1 week",
     status: "open",
     createdAt: "2026-02-01",
-    photos: ["https://picsum.photos/seed/kitchen-before-1/400/280"],
+    photos: ["/images/jobs/kitchen-cabinets.png"],
     quotes: [
       {
         id: "quote-juan-kitchen",
@@ -112,7 +112,7 @@ export const INITIAL_PROJECTS: Project[] = [
     timeline: "2 weeks",
     status: "open",
     createdAt: "2026-02-10",
-    photos: ["https://picsum.photos/seed/house-exterior-1/400/280"],
+    photos: ["/images/jobs/exterior-painting.png"],
     quotes: [],
   },
   {
@@ -127,7 +127,7 @@ export const INITIAL_PROJECTS: Project[] = [
     timeline: "2 days",
     status: "open",
     createdAt: "2026-02-12",
-    photos: ["https://picsum.photos/seed/mini-split-room/400/280"],
+    photos: ["/images/jobs/solar-install.png"],
     quotes: [
       {
         id: "quote-carlos-ac",

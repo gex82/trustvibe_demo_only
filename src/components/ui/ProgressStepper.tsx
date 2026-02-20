@@ -1,11 +1,5 @@
 import type { ProjectStatus } from "../../types";
-
-const steps = [
-  { key: "open", label: "Posted" },
-  { key: "funded", label: "Funded" },
-  { key: "in_progress", label: "Working" },
-  { key: "completed", label: "Done" },
-];
+import { useApp } from "../../context/AppContext";
 
 const statusOrder: ProjectStatus[] = [
   "draft",
@@ -22,6 +16,13 @@ interface Props {
 }
 
 export default function ProgressStepper({ status }: Props) {
+  const { t } = useApp();
+  const steps = [
+    { key: "open", label: t("step.posted") },
+    { key: "funded", label: t("step.funded") },
+    { key: "in_progress", label: t("step.working") },
+    { key: "completed", label: t("step.done") },
+  ];
   const currentIdx = statusOrder.indexOf(status);
 
   return (

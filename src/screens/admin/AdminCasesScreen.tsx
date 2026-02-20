@@ -1,41 +1,46 @@
-import { Scale, AlertTriangle, Clock, Shield, CheckCircle, ChevronDown, ChevronUp } from "lucide-react";
+import { Scale, Clock, Shield, CheckCircle, ChevronDown, ChevronUp } from "lucide-react";
 import { useState } from "react";
 import { useApp } from "../../context/AppContext";
 import TopBar from "../../components/layout/TopBar";
 import { formatCurrency } from "../../utils/formatters";
 
-const CASES = [
-  {
-    id: "case-001",
-    projectTitle: "Exterior House Painting",
-    customer: "David Colón",
-    contractor: "Paintmaster PR",
-    amount: 3200,
-    status: "open",
-    daysOpen: 15,
-    description:
-      "Customer reports contractor did not apply a second coat as agreed. Contractor claims it was never specified in the agreement. Both parties are requesting mediation.",
-    evidence: ["Customer photo of incomplete wall", "Original quote document"],
-    resolution: null,
-  },
-  {
-    id: "case-002",
-    projectTitle: "HVAC Repair — Office Unit",
-    customer: "Carmen Rios (Property Manager)",
-    contractor: "CoolAir PR",
-    amount: 1850,
-    status: "pending_resolution",
-    daysOpen: 7,
-    description:
-      "HVAC unit failed again 3 days after repair. Customer is requesting full refund. Contractor claims it was a different component that failed.",
-    evidence: ["Service receipt", "Customer video of unit", "Contractor diagnostic report"],
-    resolution: "Admin proposed 50% refund pending contractor review.",
-  },
-];
+type CaseResolution = "released" | "refunded" | "split" | null;
 
 export default function AdminCasesScreen() {
   const [expandedCase, setExpandedCase] = useState<string | null>("case-001");
+  const [resolutions, setResolutions] = useState<Record<string, CaseResolution>>({});
   const { t } = useApp();
+
+  const CASES = [
+    {
+      id: "case-001",
+      projectTitle: t("case1.title"),
+      customer: t("case1.customer"),
+      contractor: t("case1.contractor"),
+      amount: 3200,
+      status: "open",
+      daysOpen: 15,
+      description: t("case1.description"),
+      evidence: [t("case1.evidence1"), t("case1.evidence2")],
+      resolution: null as string | null,
+    },
+    {
+      id: "case-002",
+      projectTitle: t("case2.title"),
+      customer: t("case2.customer"),
+      contractor: t("case2.contractor"),
+      amount: 1850,
+      status: "pending_resolution",
+      daysOpen: 7,
+      description: t("case2.description"),
+      evidence: [t("case2.evidence1"), t("case2.evidence2"), t("case2.evidence3")],
+      resolution: t("case2.resolution"),
+    },
+  ];
+
+  const handleAction = (caseId: string, action: CaseResolution) => {
+    setResolutions((prev) => ({ ...prev, [caseId]: action }));
+  };
 
   return (
     <div className="h-full flex flex-col bg-gray-50">
@@ -60,6 +65,8 @@ export default function AdminCasesScreen() {
       <div className="flex-1 overflow-y-auto px-4 pb-4 flex flex-col gap-3">
         {CASES.map((c) => {
           const isExpanded = expandedCase === c.id;
+          const resolution = resolutions[c.id];
+
           return (
             <div
               key={c.id}
@@ -76,12 +83,18 @@ export default function AdminCasesScreen() {
                     <div className="flex items-center gap-2 mb-1">
                       <span
                         className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${
-                          c.status === "open"
+                          resolution
+                            ? "bg-emerald-100 text-emerald-600"
+                            : c.status === "open"
                             ? "bg-red-100 text-red-600"
                             : "bg-amber-100 text-amber-600"
                         }`}
                       >
-                        {c.status === "open" ? t("admin.cases.open") : t("admin.cases.pendingResolution")}
+                        {resolution
+                          ? t("admin.cases.resolved")
+                          : c.status === "open"
+                          ? t("admin.cases.open")
+                          : t("admin.cases.pendingResolution")}
                       </span>
                       <div className="flex items-center gap-1 text-gray-400">
                         <Clock size={10} />
@@ -142,18 +155,44 @@ export default function AdminCasesScreen() {
                     </div>
                   )}
 
-                  {/* Admin actions */}
-                  <div className="flex gap-2">
-                    <button className="flex-1 bg-emerald-500 text-white font-bold py-2.5 rounded-xl text-[12px] pressable">
-                      {t("admin.cases.release")}
-                    </button>
-                    <button className="flex-1 bg-red-50 border border-red-200 text-red-600 font-semibold py-2.5 rounded-xl text-[12px] pressable">
-                      {t("admin.cases.refund")}
-                    </button>
-                    <button className="flex-1 bg-amber-50 border border-amber-200 text-amber-600 font-semibold py-2.5 rounded-xl text-[12px] pressable">
-                      {t("admin.cases.split")}
-                    </button>
-                  </div>
+                  {/* Resolution success state */}
+                  {resolution ? (
+                    <div className="bg-emerald-50 border border-emerald-200 rounded-xl p-4 flex items-center gap-3">
+                      <CheckCircle size={20} className="text-emerald-500 flex-shrink-0" />
+                      <div>
+                        <p className="font-bold text-emerald-800 text-[13px]">
+                          {resolution === "released" && t("admin.cases.release")}
+                          {resolution === "refunded" && t("admin.cases.refund")}
+                          {resolution === "split" && t("admin.cases.split")}
+                        </p>
+                        <p className="text-emerald-600 text-[11px] mt-0.5">
+                          {t("admin.cases.resolved")} — {formatCurrency(c.amount)}
+                        </p>
+                      </div>
+                    </div>
+                  ) : (
+                    /* Admin actions */
+                    <div className="flex gap-2">
+                      <button
+                        onClick={() => handleAction(c.id, "released")}
+                        className="flex-1 bg-emerald-500 text-white font-bold py-2.5 rounded-xl text-[12px] pressable"
+                      >
+                        {t("admin.cases.release")}
+                      </button>
+                      <button
+                        onClick={() => handleAction(c.id, "refunded")}
+                        className="flex-1 bg-red-50 border border-red-200 text-red-600 font-semibold py-2.5 rounded-xl text-[12px] pressable"
+                      >
+                        {t("admin.cases.refund")}
+                      </button>
+                      <button
+                        onClick={() => handleAction(c.id, "split")}
+                        className="flex-1 bg-amber-50 border border-amber-200 text-amber-600 font-semibold py-2.5 rounded-xl text-[12px] pressable"
+                      >
+                        {t("admin.cases.split")}
+                      </button>
+                    </div>
+                  )}
                 </div>
               )}
             </div>

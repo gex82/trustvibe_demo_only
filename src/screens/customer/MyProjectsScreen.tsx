@@ -24,7 +24,7 @@ export default function MyProjectsScreen() {
             icon={FolderOpen}
             title={t("projects.empty")}
             subtitle={t("projects.emptySub")}
-            action={{ label: t("projects.postProject"), onClick: () => {} }}
+            action={{ label: t("projects.postProject"), onClick: () => navigate("/projects/new") }}
           />
         ) : (
           myProjects.map((project) => (

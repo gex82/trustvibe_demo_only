@@ -133,7 +133,7 @@ export default function BrowseProjectsScreen() {
 
                     <div className="flex items-center justify-between mt-2">
                       <span className="text-[10px] text-gray-400">
-                        {project.quotes.length} {project.quotes.length !== 1 ? t("projects.quotes") : t("projects.quote")} submitted
+                        {project.quotes.length} {project.quotes.length !== 1 ? t("projects.quotes") : t("projects.quote")} {t("browse.submitted")}
                       </span>
                       <span className="text-[11px] font-semibold text-teal-600">
                         {t("browse.viewQuote")}

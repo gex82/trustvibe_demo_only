@@ -1,11 +1,11 @@
 import { useState, useRef, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { Send, FolderOpen } from "lucide-react";
 import { useAuth } from "../../context/AuthContext";
 import { useApp } from "../../context/AppContext";
 import { INITIAL_THREADS } from "../../data/messages";
 import { findUserById } from "../../data/users";
-import type { Message, MessageThread } from "../../types";
+import type { Contractor, Message, MessageThread } from "../../types";
 import TopBar from "../../components/layout/TopBar";
 import Avatar from "../../components/ui/Avatar";
 import { formatTime } from "../../utils/formatters";
@@ -13,11 +13,46 @@ import { formatTime } from "../../utils/formatters";
 export default function MessagesScreen() {
   const { currentUser } = useAuth();
   const { t } = useApp();
-  const [threads, setThreads] = useState<MessageThread[]>(INITIAL_THREADS);
-  const [activeThread, setActiveThread] = useState<MessageThread | null>(threads[0] ?? null);
-  const [input, setInput] = useState("");
+  const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const bottomRef = useRef<HTMLDivElement>(null);
+
+  // Build initial threads — add a new thread if ?contractor= param is present and thread doesn't exist yet
+  const [threads, setThreads] = useState<MessageThread[]>(() => {
+    const contractorId = searchParams.get("contractor");
+    if (!contractorId || !currentUser) return INITIAL_THREADS;
+
+    const existing = INITIAL_THREADS.find(
+      (th) => th.participants.includes(contractorId) && th.participants.includes(currentUser.id)
+    );
+    if (existing) return INITIAL_THREADS;
+
+    const contractor = findUserById(contractorId) as Contractor | null;
+    if (!contractor) return INITIAL_THREADS;
+
+    const newThread: MessageThread = {
+      id: `thread-${contractorId}-${Date.now()}`,
+      participants: [currentUser.id, contractorId],
+      projectId: "",
+      projectTitle: (contractor.businessName ?? contractor.name),
+      messages: [],
+    };
+    return [newThread, ...INITIAL_THREADS];
+  });
+
+  // Set active thread: if ?contractor= is specified, find that thread; otherwise use first thread
+  const [activeThread, setActiveThread] = useState<MessageThread | null>(() => {
+    const contractorId = searchParams.get("contractor");
+    if (contractorId && currentUser) {
+      const match = threads.find(
+        (th) => th.participants.includes(contractorId) && th.participants.includes(currentUser.id)
+      );
+      if (match) return match;
+    }
+    return threads[0] ?? null;
+  });
+
+  const [input, setInput] = useState("");
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -59,8 +94,8 @@ export default function MessagesScreen() {
         <TopBar title={t("nav.messages")} />
         <div className="flex-1 flex flex-col items-center justify-center px-6 text-center">
           <FolderOpen size={36} className="text-gray-300 mb-3" />
-          <p className="text-gray-500 font-medium">No messages yet</p>
-          <p className="text-gray-400 text-sm mt-1">Accept a quote to start chatting with your contractor.</p>
+          <p className="text-gray-500 font-medium">{t("msg.empty")}</p>
+          <p className="text-gray-400 text-sm mt-1">{t("msg.emptySub")}</p>
         </div>
       </div>
     );
@@ -82,7 +117,7 @@ export default function MessagesScreen() {
         <div>
           <p className="font-bold text-gray-900 text-[14px]">
             {otherUser?.role === "contractor"
-              ? (otherUser as any).businessName ?? otherUser.name
+              ? (otherUser as Contractor).businessName ?? otherUser.name
               : otherUser?.name}
           </p>
           <p className="text-gray-400 text-[11px] truncate max-w-[200px]">
@@ -93,6 +128,11 @@ export default function MessagesScreen() {
 
       {/* Messages */}
       <div className="flex-1 overflow-y-auto px-4 py-4 flex flex-col gap-2">
+        {activeThread.messages.length === 0 && (
+          <div className="flex-1 flex flex-col items-center justify-center text-center py-12">
+            <p className="text-gray-400 text-[13px]">{t("msg.startConversation")}</p>
+          </div>
+        )}
         {activeThread.messages.map((msg, i) => {
           const isMe = msg.senderId === currentUser?.id;
           const showAvatar =

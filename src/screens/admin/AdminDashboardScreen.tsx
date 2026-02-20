@@ -7,19 +7,19 @@ import TopBar from "../../components/layout/TopBar";
 import Avatar from "../../components/ui/Avatar";
 import { formatCurrency } from "../../utils/formatters";
 
-const ACTIVITY_LOG = [
-  { id: 1, icon: "✅", text: "Escrow released: Bathroom Renovation ($2,604 to Juan)", time: "2 hours ago" },
-  { id: 2, icon: "🔍", text: "New credential verification request: Rosa Morales (License #PR-CONT-3142)", time: "4 hours ago" },
-  { id: 3, icon: "⚠️", text: "Case escalated: Exterior Paint dispute — $3,200 in hold", time: "1 day ago" },
-  { id: 4, icon: "👤", text: "New contractor registered: Carlos Vega (Electrical)", time: "2 days ago" },
-  { id: 5, icon: "📋", text: "4 new projects posted in San Juan this week", time: "3 days ago" },
-];
-
 export default function AdminDashboardScreen() {
   const navigate = useNavigate();
   const { currentUser, logout } = useAuth();
   const { projects } = useProjects();
   const { t } = useApp();
+
+  const ACTIVITY_LOG = [
+    { id: 1, icon: "✅", text: `${t("admin.activity.escrowReleased")} Bathroom Renovation ($2,604 ${t("admin.activity.toContractor")} Juan)`, time: `2 ${t("admin.activity.hoursAgo")}` },
+    { id: 2, icon: "🔍", text: `${t("admin.activity.credentialRequest")} Rosa Morales (${t("admin.activity.licenseLabel")} #PR-CONT-3142)`, time: `4 ${t("admin.activity.hoursAgo")}` },
+    { id: 3, icon: "⚠️", text: `${t("admin.activity.caseEscalated")} Exterior Paint ${t("admin.activity.disputeInHold")} $3,200 ${t("admin.activity.inHold")}`, time: t("admin.activity.dayAgo") },
+    { id: 4, icon: "👤", text: `${t("admin.activity.newContractor")} Carlos Vega (${t("category.electrical")})`, time: `2 ${t("admin.activity.daysAgo")}` },
+    { id: 5, icon: "📋", text: `4 ${t("admin.activity.newProjects")}`, time: `3 ${t("admin.activity.daysAgo")}` },
+  ];
 
   const totalEscrow = projects
     .filter((p) => p.escrowAmount && (p.status === "in_progress" || p.status === "funded" || p.status === "complete_requested"))

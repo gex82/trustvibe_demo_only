@@ -4,33 +4,33 @@ import { Shield, Eye, EyeOff } from "lucide-react";
 import { useAuth } from "../../context/AuthContext";
 import { useApp } from "../../context/AppContext";
 
-const DEMO_CHIPS = [
-  {
-    label: "Customer",
-    name: "Maria Rodriguez",
-    email: "maria.rodriguez@trustvibe.test",
-    password: "DemoCustomer!123",
-    color: "bg-teal-500",
-  },
-  {
-    label: "Contractor",
-    name: "Juan Reyes",
-    email: "juan.services@trustvibe.test",
-    password: "DemoContractor!123",
-    color: "bg-blue-500",
-  },
-  {
-    label: "Admin",
-    name: "Admin",
-    email: "admin@trustvibe.test",
-    password: "DemoAdmin!123",
-    color: "bg-purple-500",
-  },
-];
-
 export default function LoginScreen() {
   const { login } = useAuth();
   const { t, lang, setLang } = useApp();
+
+  const DEMO_CHIPS = [
+    {
+      labelKey: "login.customer",
+      name: "Maria Rodriguez",
+      email: "maria.rodriguez@trustvibe.test",
+      password: "DemoCustomer!123",
+      color: "bg-teal-500",
+    },
+    {
+      labelKey: "login.contractor",
+      name: "Juan Reyes",
+      email: "juan.services@trustvibe.test",
+      password: "DemoContractor!123",
+      color: "bg-blue-500",
+    },
+    {
+      labelKey: "login.admin",
+      name: "Admin",
+      email: "admin@trustvibe.test",
+      password: "DemoAdmin!123",
+      color: "bg-purple-500",
+    },
+  ];
   const navigate = useNavigate();
 
   const [email, setEmail] = useState("");
@@ -54,7 +54,7 @@ export default function LoginScreen() {
     }, 600);
   };
 
-  const fillDemo = (chip: (typeof DEMO_CHIPS)[0]) => {
+  const fillDemo = (chip: { labelKey: string; name: string; email: string; password: string; color: string }) => {
     setEmail(chip.email);
     setPassword(chip.password);
     setError("");
@@ -148,7 +148,7 @@ export default function LoginScreen() {
             disabled={loading}
             className="w-full bg-teal-600 hover:bg-teal-700 text-white font-bold py-3.5 rounded-2xl text-[15px] transition pressable mt-1 disabled:opacity-60"
           >
-            {loading ? "Signing in..." : t("btn.signIn")}
+            {loading ? t("login.signingIn") : t("btn.signIn")}
           </button>
         </form>
 
@@ -167,10 +167,10 @@ export default function LoginScreen() {
                 <div
                   className={`w-7 h-7 rounded-full ${chip.color} flex items-center justify-center text-white font-bold text-[11px]`}
                 >
-                  {chip.label[0]}
+                  {t(chip.labelKey)[0].toUpperCase()}
                 </div>
                 <span className="text-[10px] font-semibold text-gray-500">
-                  {chip.label}
+                  {t(chip.labelKey)}
                 </span>
               </button>
             ))}
@@ -181,7 +181,7 @@ export default function LoginScreen() {
         <div className="bg-teal-50 rounded-xl p-3 flex gap-2 items-start mt-1">
           <Shield size={14} className="text-teal-500 flex-shrink-0 mt-0.5" />
           <p className="text-teal-700 text-[11px] leading-relaxed">
-            <strong>Escrow-protected payments.</strong> Your money is held securely and only released when you approve the completed work.
+            <strong>{t("login.trustNote")}</strong> {t("login.trustNoteSub")}
           </p>
         </div>
       </div>

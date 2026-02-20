@@ -16,6 +16,7 @@ import FundEscrowScreen from "./screens/customer/FundEscrowScreen";
 import ApproveReleaseScreen from "./screens/customer/ApproveReleaseScreen";
 import SubmitReviewScreen from "./screens/customer/SubmitReviewScreen";
 import MessagesScreen from "./screens/customer/MessagesScreen";
+import NewProjectScreen from "./screens/customer/NewProjectScreen";
 
 // Contractor
 import ContractorHomeScreen from "./screens/contractor/ContractorHomeScreen";
@@ -48,6 +49,7 @@ function AppRoutes() {
         <Route path="/search" element={<SearchScreen />} />
         <Route path="/contractor/:id" element={<ContractorProfileScreen />} />
         <Route path="/projects" element={<MyProjectsScreen />} />
+        <Route path="/projects/new" element={<NewProjectScreen />} />
         <Route path="/project/:id" element={<ProjectDetailScreen />} />
         <Route path="/project/:id/fund" element={<FundEscrowScreen />} />
         <Route path="/project/:id/release" element={<ApproveReleaseScreen />} />

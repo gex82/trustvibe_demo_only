@@ -12,7 +12,7 @@ export default function TrustBadge({ compact = false }: Props) {
     return (
       <div className="inline-flex items-center gap-1.5 bg-teal-50 border border-teal-200 text-teal-700 text-xs font-semibold px-2.5 py-1 rounded-full">
         <Shield size={12} fill="#14b8a6" strokeWidth={0} className="text-teal-500" />
-        TrustVibe Protected
+        {t("escrow.protected")}
       </div>
     );
   }

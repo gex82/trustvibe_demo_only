@@ -8,17 +8,17 @@ import Badge from "../../components/ui/Badge";
 import Card from "../../components/ui/Card";
 import { formatCurrency, formatRelative } from "../../utils/formatters";
 
-const ACTIVITY = [
-  { id: "a1", icon: "💬", text: "Juan sent you a message about Bathroom Renovation", time: "2026-02-01T12:05:00", path: "/messages" },
-  { id: "a2", icon: "✅", text: "Escrow funded — $2,800 held securely", time: "2026-01-15T09:00:00", path: "/project/proj-bathroom" },
-  { id: "a3", icon: "📋", text: "Juan submitted a quote for Kitchen Cabinet Repair", time: "2026-02-05T14:30:00", path: "/project/proj-kitchen" },
-];
-
 export default function CustomerHomeScreen() {
   const { currentUser } = useAuth();
   const { projects } = useProjects();
   const { t } = useApp();
   const navigate = useNavigate();
+
+  const ACTIVITY = [
+    { id: "a1", icon: "💬", text: `Juan ${t("activity.messageSent")} Bathroom Renovation`, time: "2026-02-01T12:05:00", path: "/messages" },
+    { id: "a2", icon: "✅", text: `${t("activity.escrowFunded")} $2,800 ${t("activity.heldSecurely")}`, time: "2026-01-15T09:00:00", path: "/project/proj-bathroom" },
+    { id: "a3", icon: "📋", text: `Juan ${t("activity.quoteSubmitted")} Kitchen Cabinet Repair`, time: "2026-02-05T14:30:00", path: "/project/proj-kitchen" },
+  ];
 
   const myProjects = projects.filter((p) => p.customerId === "user-maria");
   const activeProject = myProjects.find(
@@ -123,7 +123,7 @@ export default function CustomerHomeScreen() {
           <div className="grid grid-cols-2 gap-2">
             {[
               { icon: Search, label: t("home.findContractors"), color: "bg-teal-50 text-teal-600", path: "/search" },
-              { icon: Plus, label: t("home.newProject"), color: "bg-blue-50 text-blue-600", path: "/projects" },
+              { icon: Plus, label: t("home.newProject"), color: "bg-blue-50 text-blue-600", path: "/projects/new" },
               { icon: FolderOpen, label: t("home.myProjects"), color: "bg-amber-50 text-amber-600", path: "/projects" },
               { icon: MessageCircle, label: t("nav.messages"), color: "bg-purple-50 text-purple-600", path: "/messages" },
             ].map(({ icon: Icon, label, color, path }) => (

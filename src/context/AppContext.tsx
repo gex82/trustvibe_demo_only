@@ -67,6 +67,7 @@ const translations: Record<Lang, Record<string, string>> = {
     "msg.send": "Send",
     "msg.empty": "No messages yet",
     "msg.emptySub": "Accept a quote to start chatting with your contractor.",
+    "msg.startConversation": "Send the first message to get started.",
 
     // ── Review ───────────────────────────────────────────────────────────────
     "review.title": "Rate your experience",
@@ -316,6 +317,90 @@ const translations: Record<Lang, Record<string, string>> = {
     "admin.cases.release": "✓ Release Funds",
     "admin.cases.refund": "↩ Full Refund",
     "admin.cases.split": "⚖️ Split",
+
+    // ── Progress stepper ─────────────────────────────────────────────────────
+    "step.posted": "Posted",
+    "step.funded": "Funded",
+    "step.working": "Working",
+    "step.done": "Done",
+
+    // ── TopBar ───────────────────────────────────────────────────────────────
+    "btn.back": "Back",
+
+    // ── Login demo chips ─────────────────────────────────────────────────────
+    "login.customer": "Customer",
+    "login.contractor": "Contractor",
+    "login.admin": "Admin",
+
+    // ── Browse ───────────────────────────────────────────────────────────────
+    "browse.submitted": "submitted",
+
+    // ── Customer Home activity ────────────────────────────────────────────────
+    "activity.messageSent": "sent you a message about",
+    "activity.escrowFunded": "Escrow funded —",
+    "activity.heldSecurely": "held securely",
+    "activity.quoteSubmitted": "submitted a quote for",
+
+    // ── Additional status labels for Badge component ──────────────────────────
+    "status.pending": "Pending",
+    "status.accepted": "Accepted",
+    "status.rejected": "Not Selected",
+    "status.withdrawn": "Withdrawn",
+    "status.paid": "Paid",
+    "status.held": "In Escrow",
+
+    // ── Admin activity log ────────────────────────────────────────────────────
+    "admin.activity.escrowReleased": "Escrow released:",
+    "admin.activity.toContractor": "to",
+    "admin.activity.credentialRequest": "New credential verification request:",
+    "admin.activity.licenseLabel": "License",
+    "admin.activity.caseEscalated": "Case escalated:",
+    "admin.activity.disputeInHold": "dispute —",
+    "admin.activity.inHold": "in hold",
+    "admin.activity.newContractor": "New contractor registered:",
+    "admin.activity.newProjects": "new projects posted in San Juan this week",
+    "admin.activity.hoursAgo": "hours ago",
+    "admin.activity.dayAgo": "1 day ago",
+    "admin.activity.daysAgo": "days ago",
+
+    // ── Admin cases data ──────────────────────────────────────────────────────
+    "case1.title": "Exterior House Painting",
+    "case1.customer": "David Colón",
+    "case1.contractor": "Paintmaster PR",
+    "case1.description": "Customer reports contractor did not apply a second coat as agreed. Contractor claims it was never specified in the agreement. Both parties are requesting mediation.",
+    "case1.evidence1": "Customer photo of incomplete wall",
+    "case1.evidence2": "Original quote document",
+    "case2.title": "HVAC Repair — Office Unit",
+    "case2.customer": "Carmen Rios (Property Manager)",
+    "case2.contractor": "CoolAir PR",
+    "case2.description": "HVAC unit failed again 3 days after repair. Customer is requesting full refund. Contractor claims it was a different component that failed.",
+    "case2.evidence1": "Service receipt",
+    "case2.evidence2": "Customer video of unit",
+    "case2.evidence3": "Contractor diagnostic report",
+    "case2.resolution": "Admin proposed 50% refund pending contractor review.",
+
+    // ── New Project screen ────────────────────────────────────────────────────
+    "newProject.title": "New Project",
+    "newProject.projectTitle": "Project Title",
+    "newProject.titlePlaceholder": "e.g. Bathroom Renovation",
+    "newProject.description": "Description",
+    "newProject.descriptionPlaceholder": "Describe the work you need done...",
+    "newProject.category": "Category",
+    "newProject.selectCategory": "Select a category",
+    "newProject.budget": "Budget Range",
+    "newProject.budgetPlaceholder": "e.g. $1,000 – $2,500",
+    "newProject.timeline": "Timeline",
+    "newProject.timelinePlaceholder": "e.g. 2–3 weeks",
+    "newProject.location": "Location",
+    "newProject.locationPlaceholder": "e.g. San Juan, PR",
+    "newProject.submit": "Post Project",
+    "newProject.posting": "Posting...",
+    "newProject.success": "Project Posted!",
+    "newProject.successSub": "Contractors can now view your project and submit quotes.",
+    "newProject.viewProject": "View My Project",
+    "newProject.viewAll": "View All My Projects",
+    "newProject.contractorLinked": "Contractor linked — they'll be notified of your new project.",
+    "newProject.preLinked": "Pre-linked contractor:",
   },
 
   es: {
@@ -382,6 +467,7 @@ const translations: Record<Lang, Record<string, string>> = {
     "msg.send": "Enviar",
     "msg.empty": "Sin mensajes aún",
     "msg.emptySub": "Acepta una cotización para comenzar a chatear con tu contratista.",
+    "msg.startConversation": "Envía el primer mensaje para comenzar.",
 
     // ── Review ───────────────────────────────────────────────────────────────
     "review.title": "Califica tu experiencia",
@@ -631,6 +717,90 @@ const translations: Record<Lang, Record<string, string>> = {
     "admin.cases.release": "✓ Liberar Fondos",
     "admin.cases.refund": "↩ Reembolso Total",
     "admin.cases.split": "⚖️ Dividir",
+
+    // ── Progress stepper ─────────────────────────────────────────────────────
+    "step.posted": "Publicado",
+    "step.funded": "Fondeado",
+    "step.working": "En Proceso",
+    "step.done": "Listo",
+
+    // ── TopBar ───────────────────────────────────────────────────────────────
+    "btn.back": "Atrás",
+
+    // ── Login demo chips ─────────────────────────────────────────────────────
+    "login.customer": "Cliente",
+    "login.contractor": "Contratista",
+    "login.admin": "Admin",
+
+    // ── Browse ───────────────────────────────────────────────────────────────
+    "browse.submitted": "enviadas",
+
+    // ── Customer Home activity ────────────────────────────────────────────────
+    "activity.messageSent": "te envió un mensaje sobre",
+    "activity.escrowFunded": "Escrow fondeado —",
+    "activity.heldSecurely": "retenido de forma segura",
+    "activity.quoteSubmitted": "envió una cotización para",
+
+    // ── Additional status labels for Badge component ──────────────────────────
+    "status.pending": "Pendiente",
+    "status.accepted": "Aceptada",
+    "status.rejected": "No Seleccionada",
+    "status.withdrawn": "Retirada",
+    "status.paid": "Pagado",
+    "status.held": "En Escrow",
+
+    // ── Admin activity log ────────────────────────────────────────────────────
+    "admin.activity.escrowReleased": "Escrow liberado:",
+    "admin.activity.toContractor": "a",
+    "admin.activity.credentialRequest": "Nueva solicitud de verificación:",
+    "admin.activity.licenseLabel": "Licencia",
+    "admin.activity.caseEscalated": "Caso escalado:",
+    "admin.activity.disputeInHold": "disputa —",
+    "admin.activity.inHold": "en retención",
+    "admin.activity.newContractor": "Nuevo contratista registrado:",
+    "admin.activity.newProjects": "nuevos proyectos publicados en San Juan esta semana",
+    "admin.activity.hoursAgo": "horas",
+    "admin.activity.dayAgo": "hace 1 día",
+    "admin.activity.daysAgo": "días",
+
+    // ── Admin cases data ──────────────────────────────────────────────────────
+    "case1.title": "Pintura Exterior de Casa",
+    "case1.customer": "David Colón",
+    "case1.contractor": "Paintmaster PR",
+    "case1.description": "El cliente reporta que el contratista no aplicó una segunda capa como se acordó. El contratista alega que nunca se especificó en el acuerdo. Ambas partes solicitan mediación.",
+    "case1.evidence1": "Foto del cliente de pared incompleta",
+    "case1.evidence2": "Documento de cotización original",
+    "case2.title": "Reparación HVAC — Unidad de Oficina",
+    "case2.customer": "Carmen Rios (Administradora de Propiedad)",
+    "case2.contractor": "CoolAir PR",
+    "case2.description": "La unidad HVAC falló nuevamente 3 días después de la reparación. El cliente solicita reembolso completo. El contratista alega que fue un componente diferente que falló.",
+    "case2.evidence1": "Recibo de servicio",
+    "case2.evidence2": "Video del cliente de la unidad",
+    "case2.evidence3": "Informe de diagnóstico del contratista",
+    "case2.resolution": "Admin propuso reembolso del 50% pendiente de revisión del contratista.",
+
+    // ── New Project screen ────────────────────────────────────────────────────
+    "newProject.title": "Nuevo Proyecto",
+    "newProject.projectTitle": "Título del Proyecto",
+    "newProject.titlePlaceholder": "ej. Renovación de Baño",
+    "newProject.description": "Descripción",
+    "newProject.descriptionPlaceholder": "Describe el trabajo que necesitas...",
+    "newProject.category": "Categoría",
+    "newProject.selectCategory": "Selecciona una categoría",
+    "newProject.budget": "Rango de Presupuesto",
+    "newProject.budgetPlaceholder": "ej. $1,000 – $2,500",
+    "newProject.timeline": "Plazo",
+    "newProject.timelinePlaceholder": "ej. 2–3 semanas",
+    "newProject.location": "Ubicación",
+    "newProject.locationPlaceholder": "ej. San Juan, PR",
+    "newProject.submit": "Publicar Proyecto",
+    "newProject.posting": "Publicando...",
+    "newProject.success": "¡Proyecto Publicado!",
+    "newProject.successSub": "Los contratistas ahora pueden ver tu proyecto y enviar cotizaciones.",
+    "newProject.viewProject": "Ver Mi Proyecto",
+    "newProject.viewAll": "Ver Todos Mis Proyectos",
+    "newProject.contractorLinked": "Contratista vinculado — será notificado de tu nuevo proyecto.",
+    "newProject.preLinked": "Contratista pre-vinculado:",
   },
 };
 

@@ -21,7 +21,7 @@ export default function TopBar({
   light = false,
 }: TopBarProps) {
   const navigate = useNavigate();
-  const { lang, setLang } = useApp();
+  const { lang, setLang, t } = useApp();
 
   const handleBack = () => {
     if (backPath) navigate(backPath);
@@ -44,7 +44,7 @@ export default function TopBar({
             }`}
           >
             <ChevronLeft size={20} strokeWidth={2.5} />
-            Back
+            {t("btn.back")}
           </button>
         )}
       </div>

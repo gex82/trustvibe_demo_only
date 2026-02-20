@@ -120,7 +120,7 @@ export default function ProjectDetailScreen() {
                     </div>
                   </div>
                   <button
-                    onClick={() => navigate("/messages")}
+                    onClick={() => navigate(contractor ? `/messages?contractor=${contractor.id}` : "/messages")}
                     className="ml-auto w-9 h-9 bg-teal-50 rounded-full flex items-center justify-center pressable"
                   >
                     <MessageCircle size={16} className="text-teal-600" />
@@ -169,7 +169,7 @@ export default function ProjectDetailScreen() {
               ) : project.status === "in_progress" ? (
                 <div className="px-4 pb-4 flex gap-2">
                   <button
-                    onClick={() => navigate("/messages")}
+                    onClick={() => navigate(contractor ? `/messages?contractor=${contractor.id}` : "/messages")}
                     className="flex-1 bg-gray-100 text-gray-700 font-semibold py-3 rounded-2xl text-sm pressable"
                   >
                     {t("detail.messageContractor")}
