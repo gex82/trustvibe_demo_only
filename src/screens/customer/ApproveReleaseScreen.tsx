@@ -1,5 +1,5 @@
 import { useParams, useNavigate } from "react-router-dom";
-import { Shield, CheckCircle, AlertTriangle } from "lucide-react";
+import { Shield, CheckCircle, AlertTriangle, ChevronLeft, ChevronRight } from "lucide-react";
 import { useState } from "react";
 import { useProjects } from "../../context/ProjectsContext";
 import { useApp } from "../../context/AppContext";
@@ -9,6 +9,14 @@ import TopBar from "../../components/layout/TopBar";
 import Avatar from "../../components/ui/Avatar";
 import { formatCurrency } from "../../utils/formatters";
 
+const ISSUE_OPTIONS = [
+  { key: "notCompleted", labelKey: "release.issueWork" },
+  { key: "quality", labelKey: "release.issueQuality" },
+  { key: "ghosted", labelKey: "release.issueGhosted" },
+  { key: "damage", labelKey: "release.issueDamage" },
+  { key: "other", labelKey: "release.issueOther" },
+];
+
 export default function ApproveReleaseScreen() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
@@ -16,6 +24,10 @@ export default function ApproveReleaseScreen() {
   const { t } = useApp();
   const [loading, setLoading] = useState(false);
   const [done, setDone] = useState<"approved" | "issue" | null>(null);
+  const [showIssueForm, setShowIssueForm] = useState(false);
+  const [selectedIssues, setSelectedIssues] = useState<string[]>([]);
+  const [issueDetails, setIssueDetails] = useState("");
+  const [photoIndex, setPhotoIndex] = useState(0);
 
   const project = getProject(id ?? "");
   if (!project) {
@@ -32,6 +44,11 @@ export default function ApproveReleaseScreen() {
     ? (findUserById(acceptedQuote.contractorId) as Contractor | null)
     : null;
 
+  // Before photo comes from project.photos[0], after from completionPhotos[0]
+  const beforePhoto = project.photos?.[0];
+  const afterPhoto = project.completionPhotos?.[0];
+  const allCompletionPhotos = project.completionPhotos ?? [];
+
   const handleApprove = () => {
     setLoading(true);
     setTimeout(() => {
@@ -41,7 +58,13 @@ export default function ApproveReleaseScreen() {
     }, 1200);
   };
 
-  const handleIssue = () => {
+  const toggleIssue = (key: string) => {
+    setSelectedIssues((prev) =>
+      prev.includes(key) ? prev.filter((k) => k !== key) : [...prev, key]
+    );
+  };
+
+  const handleIssueSubmit = () => {
     raiseIssue(project.id);
     setDone("issue");
   };
@@ -99,6 +122,74 @@ export default function ApproveReleaseScreen() {
     );
   }
 
+  // Issue form view
+  if (showIssueForm) {
+    return (
+      <div className="h-full flex flex-col bg-gray-50">
+        <TopBar title={t("release.issueFormTitle")} back />
+        <div className="flex-1 overflow-y-auto px-4 py-4 flex flex-col gap-4">
+          <p className="text-[12px] text-gray-500 leading-relaxed">
+            {t("release.issueNote")}
+          </p>
+
+          {/* Issue checkboxes */}
+          <div className="bg-white rounded-2xl overflow-hidden" style={{ boxShadow: "0 1px 4px rgba(0,0,0,0.06)" }}>
+            {ISSUE_OPTIONS.map(({ key, labelKey }, i) => (
+              <button
+                key={key}
+                onClick={() => toggleIssue(key)}
+                className={`w-full flex items-center gap-3 px-4 py-3.5 text-left transition pressable ${
+                  i < ISSUE_OPTIONS.length - 1 ? "border-b border-gray-50" : ""
+                } ${selectedIssues.includes(key) ? "bg-red-50" : "bg-white"}`}
+              >
+                <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center flex-shrink-0 ${
+                  selectedIssues.includes(key)
+                    ? "bg-red-500 border-red-500"
+                    : "border-gray-300"
+                }`}>
+                  {selectedIssues.includes(key) && <CheckCircle size={12} className="text-white" fill="white" strokeWidth={0} />}
+                </div>
+                <span className={`text-[13px] font-medium ${selectedIssues.includes(key) ? "text-red-700" : "text-gray-700"}`}>
+                  {t(labelKey)}
+                </span>
+              </button>
+            ))}
+          </div>
+
+          {/* Free-text details */}
+          <div>
+            <p className="text-[11px] font-bold text-gray-400 uppercase tracking-wide mb-2">{t("release.issueDetails")}</p>
+            <textarea
+              value={issueDetails}
+              onChange={(e) => setIssueDetails(e.target.value)}
+              placeholder={t("release.issueDetailsPlaceholder")}
+              rows={4}
+              className="w-full bg-white border border-gray-200 rounded-2xl px-4 py-3 text-[13px] text-gray-700 placeholder-gray-400 focus:outline-none focus:border-teal-400 resize-none"
+              style={{ boxShadow: "0 1px 4px rgba(0,0,0,0.06)" }}
+            />
+          </div>
+
+          <div className="flex flex-col gap-2 pb-4">
+            <button
+              onClick={handleIssueSubmit}
+              disabled={selectedIssues.length === 0}
+              className="w-full bg-red-500 text-white font-bold py-4 rounded-2xl text-[14px] pressable disabled:opacity-40 flex items-center justify-center gap-2"
+            >
+              <AlertTriangle size={16} />
+              {t("release.submitIssue")}
+            </button>
+            <button
+              onClick={() => setShowIssueForm(false)}
+              className="w-full bg-white border border-gray-200 text-gray-500 font-semibold py-3.5 rounded-2xl text-sm pressable"
+            >
+              {t("release.cancelIssue")}
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="h-full flex flex-col bg-gray-50">
       <TopBar title={t("release.title")} back />
@@ -122,15 +213,64 @@ export default function ApproveReleaseScreen() {
           </div>
         )}
 
-        {/* Completion photos */}
-        {project.completionPhotos && project.completionPhotos.length > 0 && (
+        {/* Before/After photo comparison — Gap 4 */}
+        {beforePhoto && afterPhoto && (
+          <div>
+            <p className="text-[11px] font-bold text-gray-400 uppercase tracking-wide mb-2">{t("release.compareTitle")}</p>
+            <div className="grid grid-cols-2 gap-2">
+              <div className="relative">
+                <img src={beforePhoto} alt="Before" className="w-full h-36 object-cover rounded-xl" />
+                <div className="absolute bottom-0 left-0 right-0 bg-black/50 rounded-b-xl py-1.5 text-center">
+                  <span className="text-white text-[11px] font-bold uppercase tracking-wide">{t("release.beforeLabel")}</span>
+                </div>
+              </div>
+              <div className="relative">
+                <img src={afterPhoto} alt="After" className="w-full h-36 object-cover rounded-xl" />
+                <div className="absolute bottom-0 left-0 right-0 bg-emerald-700/70 rounded-b-xl py-1.5 text-center">
+                  <span className="text-white text-[11px] font-bold uppercase tracking-wide">{t("release.afterLabel")}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Completion photos (full gallery with nav) */}
+        {allCompletionPhotos.length > 0 && (
           <div>
             <p className="text-[11px] font-bold text-gray-400 uppercase tracking-wide mb-2">{t("release.completionPhotos")}</p>
-            <div className="grid grid-cols-2 gap-2">
-              {project.completionPhotos.map((photo, i) => (
-                <img key={i} src={photo} alt={`Completion ${i + 1}`} className="w-full h-28 object-cover rounded-xl" />
-              ))}
-            </div>
+            {allCompletionPhotos.length === 1 ? (
+              <img src={allCompletionPhotos[0]} alt="Completion" className="w-full h-44 object-cover rounded-xl" />
+            ) : (
+              <div className="relative">
+                <img
+                  src={allCompletionPhotos[photoIndex]}
+                  alt={`Completion ${photoIndex + 1}`}
+                  className="w-full h-44 object-cover rounded-xl"
+                />
+                <button
+                  onClick={() => setPhotoIndex((i) => Math.max(0, i - 1))}
+                  disabled={photoIndex === 0}
+                  className="absolute left-2 top-1/2 -translate-y-1/2 w-8 h-8 bg-black/40 rounded-full flex items-center justify-center pressable disabled:opacity-20"
+                >
+                  <ChevronLeft size={16} className="text-white" />
+                </button>
+                <button
+                  onClick={() => setPhotoIndex((i) => Math.min(allCompletionPhotos.length - 1, i + 1))}
+                  disabled={photoIndex === allCompletionPhotos.length - 1}
+                  className="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 bg-black/40 rounded-full flex items-center justify-center pressable disabled:opacity-20"
+                >
+                  <ChevronRight size={16} className="text-white" />
+                </button>
+                <div className="absolute bottom-2 left-0 right-0 flex justify-center gap-1">
+                  {allCompletionPhotos.map((_, i) => (
+                    <div
+                      key={i}
+                      className={`w-1.5 h-1.5 rounded-full transition ${i === photoIndex ? "bg-white" : "bg-white/40"}`}
+                    />
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
         )}
 
@@ -167,8 +307,9 @@ export default function ApproveReleaseScreen() {
               </>
             )}
           </button>
+          {/* Gap 5: Guided issue form instead of direct raiseIssue call */}
           <button
-            onClick={handleIssue}
+            onClick={() => setShowIssueForm(true)}
             className="w-full bg-white border border-red-200 text-red-500 font-semibold py-3.5 rounded-2xl text-sm pressable flex items-center justify-center gap-2"
           >
             <AlertTriangle size={15} />

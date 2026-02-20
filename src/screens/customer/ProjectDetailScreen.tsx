@@ -261,6 +261,14 @@ function QuoteCard({ quote, onAccept }: { quote: Quote; onAccept: () => void }) 
               <span className="text-[11px] font-semibold text-gray-700">{fmt(item.amount)}</span>
             </div>
           ))}
+          <div className="border-t border-gray-200 mt-2 pt-2 flex items-center justify-between">
+            <span className="text-[11px] text-gray-500 font-medium">{t("detail.tvFee")}</span>
+            <span className="text-[11px] font-semibold text-gray-500">+{fmt(Math.round(quote.amount * 0.07))}</span>
+          </div>
+          <div className="flex items-center justify-between mt-0.5">
+            <span className="text-[12px] font-bold text-gray-800">{t("detail.yourTotal")}</span>
+            <span className="text-[13px] font-extrabold text-teal-700">{fmt(quote.amount + Math.round(quote.amount * 0.07))}</span>
+          </div>
         </div>
 
         {quote.notes && (
@@ -272,7 +280,7 @@ function QuoteCard({ quote, onAccept }: { quote: Quote; onAccept: () => void }) 
             onClick={onAccept}
             className="w-full bg-teal-600 text-white font-bold py-3 rounded-xl text-sm pressable"
           >
-            {t("btn.acceptQuote")}
+            {t("btn.acceptQuote")} — {fmt(quote.amount + Math.round(quote.amount * 0.07))}
           </button>
         )}
         {quote.status === "accepted" && (

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Search, Star, MapPin, CheckCircle, ChevronRight, Zap } from "lucide-react";
+import { Search, Star, MapPin, CheckCircle, ChevronRight, Zap, SlidersHorizontal, X } from "lucide-react";
 import { getContractors } from "../../data/users";
 import { useApp } from "../../context/AppContext";
 import type { Contractor } from "../../types";
@@ -13,6 +13,9 @@ export default function SearchScreen() {
   const { t } = useApp();
   const [query, setQuery] = useState("");
   const [activeCategory, setActiveCategory] = useState("all");
+  const [activeMunicipality, setActiveMunicipality] = useState("all");
+  const [minRating, setMinRating] = useState(0);
+  const [showFilters, setShowFilters] = useState(false);
 
   const CATEGORIES = [
     { key: "all", label: t("category.all") },
@@ -22,6 +25,21 @@ export default function SearchScreen() {
     { key: "hvac", label: t("category.hvac") },
     { key: "carpentry", label: t("category.carpentry") },
     { key: "tiling", label: t("category.tiling") },
+  ];
+
+  const MUNICIPALITIES = [
+    { key: "all", label: t("search.filterAll") },
+    { key: "San Juan", label: t("search.filterSanJuan") },
+    { key: "Bayamón", label: t("search.filterBayamon") },
+    { key: "Caguas", label: t("search.filterCaguas") },
+    { key: "Ponce", label: t("search.filterPonce") },
+    { key: "Carolina", label: t("search.filterCarolina") },
+  ];
+
+  const RATINGS = [
+    { key: 0, label: t("category.all") },
+    { key: 4, label: t("search.rating4plus") },
+    { key: 4.5, label: t("search.rating45plus") },
   ];
 
   const contractors = getContractors();
@@ -39,8 +57,22 @@ export default function SearchScreen() {
         s.toLowerCase().includes(activeCategory.toLowerCase())
       );
 
-    return matchesQuery && matchesCategory;
+    const matchesMunicipality =
+      activeMunicipality === "all" ||
+      (c.location ?? "").toLowerCase().includes(activeMunicipality.toLowerCase());
+
+    const matchesRating = c.rating >= minRating;
+
+    return matchesQuery && matchesCategory && matchesMunicipality && matchesRating;
   });
+
+  const activeFilterCount =
+    (activeMunicipality !== "all" ? 1 : 0) + (minRating > 0 ? 1 : 0);
+
+  const clearFilters = () => {
+    setActiveMunicipality("all");
+    setMinRating(0);
+  };
 
   return (
     <div className="h-full flex flex-col bg-gray-50">
@@ -48,16 +80,89 @@ export default function SearchScreen() {
 
       {/* Search bar */}
       <div className="px-4 py-3 bg-white border-b border-gray-100">
-        <div className="relative">
-          <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
-          <input
-            type="text"
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-            placeholder={t("search.placeholder")}
-            className="w-full bg-gray-100 rounded-xl pl-9 pr-4 py-2.5 text-sm text-gray-800 placeholder-gray-400 focus:outline-none focus:bg-gray-100"
-          />
+        <div className="flex gap-2">
+          <div className="relative flex-1">
+            <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+            <input
+              type="text"
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              placeholder={t("search.placeholder")}
+              className="w-full bg-gray-100 rounded-xl pl-9 pr-4 py-2.5 text-sm text-gray-800 placeholder-gray-400 focus:outline-none"
+            />
+          </div>
+          <button
+            onClick={() => setShowFilters(!showFilters)}
+            className={`flex items-center gap-1.5 px-3 py-2.5 rounded-xl text-xs font-semibold transition pressable ${
+              activeFilterCount > 0
+                ? "bg-teal-600 text-white"
+                : "bg-gray-100 text-gray-600"
+            }`}
+          >
+            <SlidersHorizontal size={14} />
+            {activeFilterCount > 0 ? (
+              <span>{activeFilterCount} {activeFilterCount === 1 ? t("search.filtersActive") : t("search.filtersActivePlural")}</span>
+            ) : (
+              <span>{t("search.filterLabel")}</span>
+            )}
+          </button>
         </div>
+
+        {/* Expanded filter panel */}
+        {showFilters && (
+          <div className="mt-3 pt-3 border-t border-gray-100 flex flex-col gap-3">
+            {/* Municipality filter */}
+            <div>
+              <p className="text-[10px] font-bold text-gray-400 uppercase tracking-wide mb-1.5">{t("search.filterMunicipality")}</p>
+              <div className="flex gap-1.5 flex-wrap">
+                {MUNICIPALITIES.map((m) => (
+                  <button
+                    key={m.key}
+                    onClick={() => setActiveMunicipality(m.key)}
+                    className={`px-2.5 py-1 rounded-full text-[11px] font-semibold transition pressable ${
+                      activeMunicipality === m.key
+                        ? "bg-teal-600 text-white"
+                        : "bg-gray-100 text-gray-600"
+                    }`}
+                  >
+                    {m.label}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Rating filter */}
+            <div>
+              <p className="text-[10px] font-bold text-gray-400 uppercase tracking-wide mb-1.5">{t("search.filterRating")}</p>
+              <div className="flex gap-1.5">
+                {RATINGS.map((r) => (
+                  <button
+                    key={r.key}
+                    onClick={() => setMinRating(r.key)}
+                    className={`flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-semibold transition pressable ${
+                      minRating === r.key
+                        ? "bg-amber-500 text-white"
+                        : "bg-gray-100 text-gray-600"
+                    }`}
+                  >
+                    {r.key > 0 && <Star size={10} fill="currentColor" />}
+                    {r.label}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {activeFilterCount > 0 && (
+              <button
+                onClick={clearFilters}
+                className="flex items-center gap-1 text-[11px] text-red-500 font-semibold self-start pressable"
+              >
+                <X size={12} />
+                {t("search.clearFilters")}
+              </button>
+            )}
+          </div>
+        )}
       </div>
 
       {/* Category chips */}
