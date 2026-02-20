@@ -362,6 +362,7 @@ const translations: Record<Lang, Record<string, string>> = {
     "admin.activity.hoursAgo": "hours ago",
     "admin.activity.dayAgo": "1 day ago",
     "admin.activity.daysAgo": "days ago",
+    "admin.activity.solarQuote": "Solar Panel Installation quote submitted — 8 panels in Caguas (Carlos Vega, $7,200)",
 
     // ── Admin cases data ──────────────────────────────────────────────────────
     "case1.title": "Exterior House Painting",
@@ -762,6 +763,7 @@ const translations: Record<Lang, Record<string, string>> = {
     "admin.activity.hoursAgo": "horas",
     "admin.activity.dayAgo": "hace 1 día",
     "admin.activity.daysAgo": "días",
+    "admin.activity.solarQuote": "Cotización de instalación solar enviada — 8 paneles en Caguas (Carlos Vega, $7,200)",
 
     // ── Admin cases data ──────────────────────────────────────────────────────
     "case1.title": "Pintura Exterior de Casa",

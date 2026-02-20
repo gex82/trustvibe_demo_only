@@ -45,4 +45,15 @@ export const EARNINGS: EarningsRecord[] = [
     paidAt: "2026-02-19",
     status: "held",
   },
+  {
+    id: "earn-5",
+    projectId: "proj-solar",
+    projectTitle: "Solar Panel Installation (8 Panels)",
+    customerName: "Pedro V.",
+    amount: 7200,
+    fee: 300,
+    netPaid: 6900,
+    paidAt: "2026-02-14",
+    status: "pending",
+  },
 ];

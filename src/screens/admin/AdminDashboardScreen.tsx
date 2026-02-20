@@ -18,7 +18,7 @@ export default function AdminDashboardScreen() {
     { id: 2, icon: "🔍", text: `${t("admin.activity.credentialRequest")} Rosa Morales (${t("admin.activity.licenseLabel")} #PR-CONT-3142)`, time: `4 ${t("admin.activity.hoursAgo")}` },
     { id: 3, icon: "⚠️", text: `${t("admin.activity.caseEscalated")} Exterior Paint ${t("admin.activity.disputeInHold")} $3,200 ${t("admin.activity.inHold")}`, time: t("admin.activity.dayAgo") },
     { id: 4, icon: "👤", text: `${t("admin.activity.newContractor")} Carlos Vega (${t("category.electrical")})`, time: `2 ${t("admin.activity.daysAgo")}` },
-    { id: 5, icon: "📋", text: `4 ${t("admin.activity.newProjects")}`, time: `3 ${t("admin.activity.daysAgo")}` },
+    { id: 5, icon: "☀️", text: t("admin.activity.solarQuote"), time: `2 ${t("admin.activity.hoursAgo")}` },
   ];
 
   const totalEscrow = projects
