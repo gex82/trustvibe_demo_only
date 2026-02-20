@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, type ReactNode } from "react";
+import { createContext, useContext, useState, useEffect, type ReactNode } from "react";
 
 type Lang = "en" | "es";
 
@@ -420,6 +420,7 @@ const translations: Record<Lang, Record<string, string>> = {
     "search.clearFilters": "Clear",
 
     // ── Contractor profile extras ─────────────────────────────────────────────
+    "profile.credentialsTitle": "Credentials & Verification",
     "profile.reliabilityTitle": "Reliability Score Breakdown",
     "profile.reliabilityShowUp": "Show-up Rate",
     "profile.reliabilityResponse": "Response Time",
@@ -443,6 +444,8 @@ const translations: Record<Lang, Record<string, string>> = {
     "deposit.why1": "Ensures contractors take your request seriously",
     "deposit.why2": "Filters out non-serious quote requests",
     "deposit.why3": "Fully refunded if contractor doesn't show",
+    "deposit.cardLabel": "Visa •••• 4242",
+    "deposit.paid": "✓ Deposit Paid — Redirecting...",
 
     // ── Quote fee transparency ─────────────────────────────────────────────────
     "detail.yourTotal": "Your total",
@@ -882,6 +885,7 @@ const translations: Record<Lang, Record<string, string>> = {
     "search.clearFilters": "Limpiar",
 
     // ── Contractor profile extras ─────────────────────────────────────────────
+    "profile.credentialsTitle": "Credenciales y Verificación",
     "profile.reliabilityTitle": "Desglose del Puntaje de Confiabilidad",
     "profile.reliabilityShowUp": "Tasa de Asistencia",
     "profile.reliabilityResponse": "Tiempo de Respuesta",
@@ -905,6 +909,8 @@ const translations: Record<Lang, Record<string, string>> = {
     "deposit.why1": "Asegura que los contratistas tomen en serio tu solicitud",
     "deposit.why2": "Filtra solicitudes de cotización no serias",
     "deposit.why3": "Reembolso completo si el contratista no se presenta",
+    "deposit.cardLabel": "Visa •••• 4242",
+    "deposit.paid": "✓ Depósito Pagado — Redirigiendo...",
 
     // ── Quote fee transparency ─────────────────────────────────────────────────
     "detail.yourTotal": "Tu total",
@@ -937,7 +943,14 @@ interface AppContextType {
 const AppContext = createContext<AppContextType | null>(null);
 
 export function AppProvider({ children }: { children: ReactNode }) {
-  const [lang, setLang] = useState<Lang>("en");
+  const [lang, setLang] = useState<Lang>(() => {
+    const saved = localStorage.getItem("trustvibe_lang");
+    return (saved === "en" || saved === "es") ? saved : "en";
+  });
+
+  useEffect(() => {
+    localStorage.setItem("trustvibe_lang", lang);
+  }, [lang]);
 
   const t = (key: string, fallback?: string): string => {
     return translations[lang][key] ?? fallback ?? key;

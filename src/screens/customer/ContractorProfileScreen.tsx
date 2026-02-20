@@ -131,12 +131,12 @@ export default function ContractorProfileScreen() {
             {/* Payment method */}
             <div className="flex items-center gap-2 bg-gray-50 rounded-xl px-3 py-2.5 mb-4">
               <CreditCard size={16} className="text-gray-400" />
-              <span className="text-[12px] text-gray-600 font-medium">Visa •••• 4242</span>
+              <span className="text-[12px] text-gray-600 font-medium">{t("deposit.cardLabel")}</span>
             </div>
 
             {depositPaid ? (
               <div className="w-full bg-emerald-500 text-white font-bold py-4 rounded-2xl text-[15px] text-center">
-                ✓ Deposit Paid — Redirecting...
+                {t("deposit.paid")}
               </div>
             ) : (
               <>
@@ -242,7 +242,7 @@ export default function ContractorProfileScreen() {
           <div className="bg-blue-50 border border-blue-100 rounded-2xl p-4">
             <h2 className="text-[11px] font-bold text-blue-600 uppercase tracking-wide mb-2.5 flex items-center gap-1.5">
               <FileCheck size={13} />
-              Credentials &amp; Verification
+              {t("profile.credentialsTitle")}
             </h2>
             <div className="flex flex-col gap-2">
               {c.licenseNumber && (
